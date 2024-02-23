@@ -1,5 +1,5 @@
 import { ResPage, User } from "@/api/interface/index";
-import { PORT1 } from "@/api/config/servicePort";
+import { PORT1, PORT3, PORT4 } from "@/api/config/servicePort";
 import http from "@/api";
 
 /**
@@ -68,4 +68,9 @@ export const getUserDepartment = () => {
 // 获取用户角色字典
 export const getUserRole = () => {
   return http.get<User.ResRole[]>(PORT1 + `/user/role`);
+};
+
+// 获取Csdn 数据
+export const getCsdnblogsList = (params: User.ReqCsdnParams) => {
+  return http.post<ResPage<User.Csdnblogs>>(PORT4 + `/GetCsdn`, params);
 };

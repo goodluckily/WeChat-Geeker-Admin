@@ -2,3 +2,4 @@
 export const PORT1 = "/geeker";
 export const PORT2 = "/hooks";
 export const PORT3 = "/User";
+export const PORT4 = "/Blogs";

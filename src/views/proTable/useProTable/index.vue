@@ -28,10 +28,10 @@
           {{ scope.column.label }}
         </el-button>
       </template>
-      <!-- createTime -->
-      <template #createTime="scope">
+      <!-- CreateTime -->
+      <template #CreateTime="scope">
         <el-button type="primary" link @click="ElMessage.success('我是通过作用域插槽渲染的内容')">
-          {{ scope.row.createTime }}
+          {{ scope.row.CreateTime }}
         </el-button>
       </template>
       <!-- 表格操作 -->
@@ -62,6 +62,7 @@ import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/P
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import {
   getUserList,
+  getCsdnblogsList,
   deleteUser,
   editUser,
   addUser,
@@ -100,18 +101,20 @@ const dataCallback = (data: any) => {
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getUserList"
 const getTableList = (params: any) => {
+  debugger;
   let newParams = JSON.parse(JSON.stringify(params));
-  newParams.createTime && (newParams.startTime = newParams.createTime[0]);
-  newParams.createTime && (newParams.endTime = newParams.createTime[1]);
-  delete newParams.createTime;
-  return getUserList(newParams);
+  newParams.CreatedAt && (newParams.startTime = newParams.CreatedAt[0]);
+  newParams.CreatedAt && (newParams.endTime = newParams.CreatedAt[1]);
+  delete newParams.CreatedAt;
+  newParams.RefreshCount = 3;
+  return getCsdnblogsList(newParams);
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
 const { BUTTONS } = useAuthButtons();
 
 // 自定义渲染表头（使用tsx语法）
-const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
+const headerRender = (scope: HeaderRenderScope<User.Csdnblogs>) => {
   return (
     <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
       {scope.column.label}
@@ -120,91 +123,145 @@ const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
 };
 
 // 表格配置项
-const columns = reactive<ColumnProps<User.ResUserList>[]>([
-  { type: "selection", fixed: "left", width: 70 },
-  { type: "sort", label: "Sort", width: 80 },
-  { type: "expand", label: "Expand", width: 85 },
+const columns = reactive<ColumnProps<User.Csdnblogs>[]>([
+  // { type: "selection", fixed: "left", width: 70 },//选择
+  // { type: "sort", label: "Sort", width: 80 },//拖转行的
+  // { type: "expand", label: "Expand", width: 85 },//展开看信息的 json
   {
-    prop: "username",
-    label: "用户姓名",
-    search: { el: "input", tooltip: "我是搜索提示" },
+    prop: "no",
+    label: "序号",
+    width: 85,
+    render: scope => {
+      return <span>{scope.$index + 1}</span>;
+    }
+  }, //展开看信息的 json
+  {
+    prop: "title",
+    label: "标题",
+    width: 300,
+    search: { el: "input", tooltip: "我是搜索[标题]提示" },
+    render: scope => {
+      return <el-input rows="5" type="textarea" v-model={scope.row.title}></el-input>;
+    }
+  },
+  {
+    prop: "subContent",
+    label: "文章简介",
+    width: 500,
+    search: { el: "input" },
+    render: scope => {
+      return <el-input rows="5" type="textarea" v-model={scope.row.subContent}></el-input>;
+    }
+  },
+  {
+    prop: "imgBase64",
+    label: "主图",
+    width: 120,
     render: scope => {
       return (
-        <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
-          {scope.row.username}
-        </el-button>
+        <div>
+          <el-image style="width: 100px; height: 100px" src={scope.row.imgBase64} preview-src-list={[scope.row.imgBase64]} />
+          <br />
+          <a href={scope.row.imgBase64} download={scope.row.downLoadImgName}>
+            下载
+          </a>
+        </div>
       );
     }
   },
+  { prop: "author", label: "作者地址", width: 90 },
   {
-    prop: "gender",
-    label: "性别",
-    // 字典数据（本地数据）
-    // enum: genderType,
-    // 字典请求不带参数
-    enum: getUserGender,
-    // 字典请求携带参数
-    // enum: () => getUserGender({ id: 1 }),
-    search: { el: "select", props: { filterable: true } },
-    fieldNames: { label: "genderLabel", value: "genderValue" }
-  },
-  {
-    // 多级 prop
-    prop: "user.detail.age",
-    label: "年龄",
-    search: {
-      // 自定义 search 显示内容
-      render: ({ searchParam }) => {
-        return (
-          <div class="flx-center">
-            <el-input vModel_trim={searchParam.minAge} placeholder="最小年龄" />
-            <span class="mr10 ml10">-</span>
-            <el-input vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
-          </div>
-        );
-      }
-    }
-  },
-  { prop: "idCard", label: "身份证号", search: { el: "input" } },
-  { prop: "email", label: "邮箱" },
-  { prop: "address", label: "居住地址" },
-  {
-    prop: "status",
-    label: "用户状态",
-    enum: getUserStatus,
-    search: { el: "tree-select", props: { filterable: true } },
-    fieldNames: { label: "userLabel", value: "userStatus" },
-    render: scope => {
-      return (
-        <>
-          {BUTTONS.value.status ? (
-            <el-switch
-              model-value={scope.row.status}
-              active-text={scope.row.status ? "启用" : "禁用"}
-              active-value={1}
-              inactive-value={0}
-              onClick={() => changeStatus(scope.row)}
-            />
-          ) : (
-            <el-tag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</el-tag>
-          )}
-        </>
-      );
-    }
-  },
-  {
-    prop: "createTime",
+    prop: "createdAt",
     label: "创建时间",
-    headerRender,
     width: 180,
     search: {
       el: "date-picker",
       span: 2,
-      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
-      defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
+      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD" },
+      defaultValue: ["2024-02-22", "2024-02-23"]
     }
   },
-  { prop: "operation", label: "操作", fixed: "right", width: 330 }
+  { prop: "loadContextTime", label: "获取时间", width: 200, fixed: "right", filteredValue: ["YYYY-MM-DD"] },
+  {
+    prop: "contentUrl",
+    label: "文章完整Url",
+    width: 120,
+    fixed: "right",
+    render: scope => {
+      return (
+        <el-link href={scope.row.contentUrl} target="_blank" type="primary">
+          {scope.row.contentUrl}
+        </el-link>
+      );
+    }
+  },
+  { prop: "diggNum", label: "点赞数", order: "diggNum", fixed: "right" },
+  { prop: "readNum", label: "阅读数", order: "readNum", fixed: "right" },
+  { prop: "commentNum", label: "评论数", order: "commentNum", fixed: "right" }
+  // { prop: "operation", label: "操作", fixed: "right", width: 330 }
+
+  // {
+  //   prop: "username",
+  //   label: "用户姓名",
+  //   search: { el: "input", tooltip: "我是搜索提示" },
+  //   render: scope => {
+  //     return (
+  //       <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
+  //         {scope.row.username}
+  //       </el-button>
+  //     );
+  //   }
+  // },
+  // {
+  //   prop: "gender",
+  //   label: "性别",
+  //   // 字典数据（本地数据）
+  //   // enum: genderType,
+  //   // 字典请求不带参数
+  //   enum: getUserGender,
+  //   // 字典请求携带参数
+  //   // enum: () => getUserGender({ id: 1 }),
+  //   search: { el: "select", props: { filterable: true } },
+  //   fieldNames: { label: "genderLabel", value: "genderValue" }
+  // },
+
+  // {
+  //   prop: "status",
+  //   label: "用户状态",
+  //   enum: getUserStatus,
+  //   search: { el: "tree-select", props: { filterable: true } },
+  //   fieldNames: { label: "userLabel", value: "userStatus" },
+  //   render: scope => {
+  //     return (
+  //       <>
+  //         {BUTTONS.value.status ? (
+  //           <el-switch
+  //             model-value={scope.row.status}
+  //             active-text={scope.row.status ? "启用" : "禁用"}
+  //             active-value={1}
+  //             inactive-value={0}
+  //             onClick={() => changeStatus(scope.row)}
+  //           />
+  //         ) : (
+  //           <el-tag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</el-tag>
+  //         )}
+  //       </>
+  //     );
+  //   }
+  // },
+
+  // {
+  //   prop: "CreateTime",
+  //   label: "创建时间11",
+  //   headerRender,
+  //   width: 180,
+  //   search: {
+  //     el: "date-picker",
+  //     span: 2,
+  //     props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
+  //     defaultValue: ["2024-02-23 23:59:59", "2024-02-23 23:59:59"]
+  //   }
+  // },
 ]);
 
 // 表格拖拽排序
@@ -215,7 +272,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 };
 
 // 删除用户信息
-const deleteAccount = async (params: User.ResUserList) => {
+const deleteAccount = async (params: User.Csdnblogs) => {
   await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`);
   proTable.value?.getTableList();
 };
@@ -228,13 +285,13 @@ const batchDelete = async (id: string[]) => {
 };
 
 // 重置用户密码
-const resetPass = async (params: User.ResUserList) => {
+const resetPass = async (params: User.Csdnblogs) => {
   await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
   proTable.value?.getTableList();
 };
 
 // 切换用户状态
-const changeStatus = async (row: User.ResUserList) => {
+const changeStatus = async (row: User.Csdnblogs) => {
   await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
   proTable.value?.getTableList();
 };
@@ -260,7 +317,7 @@ const batchAdd = () => {
 
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
-const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
+const openDrawer = (title: string, row: Partial<User.Csdnblogs> = {}) => {
   const params = {
     title,
     isView: title === "查看",
@@ -269,5 +326,17 @@ const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
     getTableList: proTable.value?.getTableList
   };
   drawerRef.value?.acceptParams(params);
+};
+
+const downImageUrl = async url => {
+  // 创建 <a> 元素
+  debugger;
+  let a = document.createElement("a");
+  a.setAttribute("href", url);
+  a.setAttribute("download", "download");
+  a.setAttribute("target", "_blank");
+  let clickEvent = document.createEvent("MouseEvents");
+  clickEvent.initEvent("click", true, true);
+  a.dispatchEvent(clickEvent);
 };
 </script>

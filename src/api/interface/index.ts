@@ -15,6 +15,7 @@ export interface ResPage<T> {
   pageNum: number;
   pageSize: number;
   total: number;
+  code: string;
 }
 
 // 分页请求参数
@@ -47,6 +48,12 @@ export namespace Login {
 
 // 用户管理模块
 export namespace User {
+  export interface ReqCsdnParams {
+    Title: string;
+    CreateTime: string[];
+    RefreshCount: 2;
+  }
+
   export interface ReqUserParams extends ReqPage {
     LoginName: string;
     gender: number;
@@ -87,5 +94,140 @@ export namespace User {
     id: string;
     name: string;
     children?: ResDepartment[];
+  }
+
+  //文章Model
+  export interface BaseBlogModel {
+    Id: string;
+    Title: string;
+
+    IsDel: boolean;
+    CreateTime: string;
+  }
+
+  /**
+   * Csdn博客
+   */
+  export interface Csdnblogs extends BaseBlogModel {
+    img: string;
+    imgBase64: string;
+    subContent: string;
+    contentUrl: string;
+    author: string;
+    authorManUrl: string;
+    createdAt: string;
+    productType: string;
+    diggNum: number;
+    /**
+     * 点赞数
+     */
+    commentNum: number;
+    readNum: number;
+    analyzingType: any;
+    downLoadImgName: string;
+  }
+
+  /**
+   * Cn博客
+   */
+  export interface Cnblogs extends BaseBlogModel {
+    Img: string;
+    SubContent: string;
+    ContentUrl: string;
+    RecommendNum: number;
+    Author: string;
+    AuthorManUrl: string;
+    ReleaseTime: Date;
+    CommentNum: number;
+    ReadNum: number;
+    AnalyzingType: any;
+  }
+
+  /**
+   * Cn博客
+   */
+  export interface CodeDeaultblogs extends BaseBlogModel {
+    ContentUrl: string;
+    SubContent: string;
+    Category: string;
+    ReleaseTime: Date;
+    /**
+     * 阅读
+     */
+    ReadNum: number;
+    /**
+     * 评论
+     */
+    CommentNum: number;
+    /**
+     * 喜欢
+     */
+    LikeNum: number;
+    /**
+     * 收藏
+     */
+    CollectionNum: number;
+    AnalyzingType: any;
+  }
+
+  export interface CTO51blogs extends BaseBlogModel {
+    SubContent: string;
+    ContentUrl: string;
+    Img: string;
+    KeyWords: string;
+    SourceType: string;
+    ReleaseTime: Date;
+    AnalyzingType: any;
+  }
+
+  export interface ItHomeblogs extends BaseBlogModel {
+    ContentUrl: string;
+    SubContent: string;
+    Tags: string;
+    TagsUrl: string;
+    Img: string;
+    ReleaseTime: Date;
+    AnalyzingType: any;
+  }
+
+  export interface JueJinblogs extends BaseBlogModel {
+    Img: string;
+    SubContent: string;
+    ContentUrl: string;
+    Author: string;
+    AuthorManUrl: string;
+    ReleaseTime: Date;
+    CommentNum: number;
+    GiveLikeNum: number;
+    ReadNum: number;
+    HotIndex: number;
+    AnalyzingType: any;
+  }
+
+  export interface OsChinablogs extends BaseBlogModel {
+    Img: string;
+    SubContent: string;
+    ContentUrl: string;
+    Author: string;
+    AuthorManUrl: string;
+    ReleaseTimeStr: string;
+    CommentNum: number;
+    ReadNum: number;
+    LikeNum: number;
+    AnalyzingType: any;
+  }
+
+  export interface Segmentfaultblogs extends BaseBlogModel {
+    ContentUrl: string;
+    Author: string;
+    Img: string;
+    AuthorManUrl: string;
+    ReleaseTime: Date;
+    DiggNum: number;
+    /**
+     * 点赞数
+     */
+    CommentNum: number;
+    AnalyzingType: any;
   }
 }

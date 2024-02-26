@@ -11,7 +11,7 @@
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
-          批量删除用户(其他)
+          批量删除用户 (推荐)
         </el-button>
       </template>
       <!-- Expand -->
@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup lang="tsx" name="useProTable">
+<script setup lang="tsx" name="useProTableTuiJian">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
@@ -100,8 +100,9 @@ const getTableList = (params: any) => {
   newParams.CreatedAt && (newParams.startTime = newParams.CreatedAt[0]);
   newParams.CreatedAt && (newParams.endTime = newParams.CreatedAt[1]);
   delete newParams.CreatedAt;
+
   newParams.RefreshCount = 3;
-  newParams.BlogType = "Other";
+  newParams.BlogType = "TuiJian";
   newParams.RerdisCacheMinute = 10;
   return getCsdnblogsList(newParams);
 };

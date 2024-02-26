@@ -74,3 +74,8 @@ export const getUserRole = () => {
 export const getCsdnblogsList = (params: User.ReqCsdnParams) => {
   return http.post<ResPage<User.Csdnblogs>>(PORT4 + `/GetCsdn`, params);
 };
+
+// 获取Csdn 数据 推荐
+export const getCsdnblogsTuiJianList = (params: User.ReqCsdnParams) => {
+  return http.post<ResPage<User.Csdnblogs>>(PORT4 + `/GetCsdn`, params);
+};

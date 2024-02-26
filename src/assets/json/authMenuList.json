@@ -21,7 +21,7 @@
       "redirect": "/proTable/useProTable",
       "meta": {
         "icon": "MessageBox",
-        "title": "超级表格",
+        "title": "CSDN",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -30,35 +30,32 @@
       },
       "children": [
         {
-          "path": "/proTable/useProTable",
-          "name": "useProTable",
-          "component": "/proTable/useProTable/index",
+          "path": "/proTable/useProTable/indexTuiJian",
+          "name": "useProTableTuiJian",
+          "component": "/proTable/useProTable/indexTuiJian",
           "meta": {
             "icon": "Menu",
-            "title": "使用 ProTable",
+            "title": "博客文章<推荐>",
             "isLink": "",
             "isHide": false,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true
-          },
-          "children": [
-            {
-              "path": "/proTable/useProTable/detail/:id",
-              "name": "useProTableDetail",
-              "component": "/proTable/useProTable/detail",
-              "meta": {
-                "icon": "Menu",
-                "title": "ProTable 详情",
-                "activeMenu": "/proTable/useProTable",
-                "isLink": "",
-                "isHide": true,
-                "isFull": false,
-                "isAffix": false,
-                "isKeepAlive": true
-              }
-            }
-          ]
+          }
+        },
+        {
+          "path": "/proTable/useProTable",
+          "name": "useProTable",
+          "component": "/proTable/useProTable/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "博客文章<其他>",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     },

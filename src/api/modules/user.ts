@@ -1,6 +1,7 @@
 import { ResPage, User } from "@/api/interface/index";
 import { PORT1, PORT3, PORT4 } from "@/api/config/servicePort";
 import http from "@/api";
+import { Cnblogs } from "@/api/interface";
 
 /**
  * @name 用户管理模块
@@ -75,7 +76,7 @@ export const getCsdnblogsList = (params: User.ReqCsdnParams) => {
   return http.post<ResPage<User.Csdnblogs>>(PORT4 + `/GetCsdn`, params);
 };
 
-// 获取Csdn 数据 推荐
-export const getCsdnblogsTuiJianList = (params: User.ReqCsdnParams) => {
-  return http.post<ResPage<User.Csdnblogs>>(PORT4 + `/GetCsdn`, params);
+// 获取博客园 数据
+export const getBkblogsList = (params: User.ReqCsdnParams) => {
+  return http.post<ResPage<User.Cnblogs>>(PORT4 + `/GetBk`, params);
 };

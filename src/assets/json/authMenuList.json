@@ -16,9 +16,53 @@
       }
     },
     {
-      "path": "/proTable",
-      "name": "proTable",
-      "redirect": "/proTable/useProTable",
+      "path": "/table-bky",
+      "name": "table-bky",
+      "redirect": "/table-bky/proTable",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "博客园",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/table-bky/proTable/news",
+          "name": "news-bky",
+          "component": "/table-bky/proTable/news",
+          "meta": {
+            "icon": "Menu",
+            "title": "新闻",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/table-bky/proTable",
+          "name": "index-bky",
+          "component": "/table-bky/proTable/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "博客文章",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/table-csdn",
+      "name": "table-csdn",
+      "redirect": "/table-csdn/proTable",
       "meta": {
         "icon": "MessageBox",
         "title": "CSDN",
@@ -30,9 +74,9 @@
       },
       "children": [
         {
-          "path": "/proTable/useProTable/indexTuiJian",
+          "path": "/table-csdn/proTable/indexTuiJian",
           "name": "useProTableTuiJian",
-          "component": "/proTable/useProTable/indexTuiJian",
+          "component": "/table-csdn/proTable/indexTuiJian",
           "meta": {
             "icon": "Menu",
             "title": "博客文章<推荐>",
@@ -44,9 +88,9 @@
           }
         },
         {
-          "path": "/proTable/useProTable",
-          "name": "useProTable",
-          "component": "/proTable/useProTable/index",
+          "path": "/table-csdn/proTable",
+          "name": "proTable",
+          "component": "/table-csdn/proTable/index",
           "meta": {
             "icon": "Menu",
             "title": "博客文章<其他>",

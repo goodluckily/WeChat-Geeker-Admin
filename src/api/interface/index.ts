@@ -110,7 +110,6 @@ export namespace User {
    */
   export interface Csdnblogs extends BaseBlogModel {
     img: string;
-    imgBase64: string;
     subContent: string;
     contentUrl: string;
     author: string;
@@ -124,23 +123,42 @@ export namespace User {
     commentNum: number;
     readNum: number;
     analyzingType: any;
+
+    //补充
+    id: any;
+    sufixName: string;
     downLoadImgName: string;
+    /**
+     * 获取时间
+     */
+    loadContextTime: string;
+    imgBase64: string;
   }
 
   /**
    * Cn博客
    */
   export interface Cnblogs extends BaseBlogModel {
-    Img: string;
-    SubContent: string;
-    ContentUrl: string;
-    RecommendNum: number;
-    Author: string;
-    AuthorManUrl: string;
-    ReleaseTime: Date;
-    CommentNum: number;
-    ReadNum: number;
-    AnalyzingType: any;
+    title: string;
+    img: string;
+    subContent: string;
+    contentUrl: string;
+    recommendNum: number;
+    author: string;
+    authorManUrl: string;
+    releaseTime: Date;
+    commentNum: number;
+    readNum: number;
+    analyzingType: any;
+
+    id: any;
+    sufixName: string;
+    downLoadImgName: string;
+    /**
+     * 获取时间
+     */
+    loadContextTime: string;
+    imgBase64: string;
   }
 
   /**

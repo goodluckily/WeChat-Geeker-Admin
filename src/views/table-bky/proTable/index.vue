@@ -11,7 +11,7 @@
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
-          批量删除用户(其他)
+          批量删除用户(博客文章)
         </el-button>
       </template>
       <!-- Expand -->
@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script setup lang="tsx" name="useProTable">
+<script setup lang="tsx" name="index-bky">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
@@ -53,19 +53,7 @@ import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
-import {
-  getUserList,
-  getCsdnblogsList,
-  deleteUser,
-  editUser,
-  addUser,
-  changeUserStatus,
-  resetUserPassWord,
-  exportUserInfo,
-  BatchAddUser,
-  getUserStatus,
-  getUserGender
-} from "@/api/modules/user";
+import { getBkblogsList } from "@/api/modules/user";
 
 const router = useRouter();
 
@@ -99,16 +87,16 @@ const getTableList = (params: any) => {
   newParams.CreatedAt && (newParams.endTime = newParams.CreatedAt[1]);
   delete newParams.CreatedAt;
   newParams.RefreshCount = 3;
-  newParams.BlogType = "Other";
+  newParams.BlogType = "Blogs";
   newParams.RerdisCacheMinute = 10;
-  return getCsdnblogsList(newParams);
+  return getBkblogsList(newParams);
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
 const { BUTTONS } = useAuthButtons();
 
 // 自定义渲染表头（使用tsx语法）
-const headerRender = (scope: HeaderRenderScope<User.Csdnblogs>) => {
+const headerRender = (scope: HeaderRenderScope<User.Cnblogs>) => {
   return (
     <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
       {scope.column.label}
@@ -117,7 +105,7 @@ const headerRender = (scope: HeaderRenderScope<User.Csdnblogs>) => {
 };
 
 // 表格配置项
-const columns = reactive<ColumnProps<User.Csdnblogs>[]>([
+const columns = reactive<ColumnProps<User.Cnblogs>[]>([
   // { type: "selection", fixed: "left", width: 70 },//选择
   // { type: "sort", label: "Sort", width: 80 },//拖转行的
   // { type: "expand", label: "Expand", width: 85 },//展开看信息的 json
@@ -193,7 +181,6 @@ const columns = reactive<ColumnProps<User.Csdnblogs>[]>([
   { prop: "readNum", label: "阅读数", sortable: true, fixed: "right" },
   { prop: "commentNum", label: "评论数", sortable: true, fixed: "right" }
   // { prop: "operation", label: "操作", fixed: "right", width: 330 }
-
   // {
   //   prop: "username",
   //   label: "用户姓名",
@@ -266,7 +253,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 };
 
 // 删除用户信息
-const deleteAccount = async (params: User.Csdnblogs) => {
+const deleteAccount = async (params: User.Cnblogs) => {
   await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`);
   proTable.value?.getTableList();
 };
@@ -279,13 +266,13 @@ const batchDelete = async (id: string[]) => {
 };
 
 // 重置用户密码
-const resetPass = async (params: User.Csdnblogs) => {
+const resetPass = async (params: User.Cnblogs) => {
   await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
   proTable.value?.getTableList();
 };
 
 // 切换用户状态
-const changeStatus = async (row: User.Csdnblogs) => {
+const changeStatus = async (row: User.Cnblogs) => {
   await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
   proTable.value?.getTableList();
 };
@@ -311,7 +298,7 @@ const batchAdd = () => {
 
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
-const openDrawer = (title: string, row: Partial<User.Csdnblogs> = {}) => {
+const openDrawer = (title: string, row: Partial<User.Cnblogs> = {}) => {
   const params = {
     title,
     isView: title === "查看",

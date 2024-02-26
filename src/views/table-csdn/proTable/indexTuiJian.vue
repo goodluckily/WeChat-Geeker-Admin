@@ -11,7 +11,7 @@
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
         <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
-          批量删除用户(其他)
+          批量删除用户 (推荐)
         </el-button>
       </template>
       <!-- Expand -->
@@ -37,12 +37,11 @@
         <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
       </template>
     </ProTable>
-    <UserDrawer ref="drawerRef" />
     <ImportExcel ref="dialogRef" />
   </div>
 </template>
 
-<script setup lang="tsx" name="useProTable">
+<script setup lang="tsx" name="useProTableTuiJian">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
@@ -52,7 +51,6 @@ import { useAuthButtons } from "@/hooks/useAuthButtons";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
-import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import {
@@ -100,8 +98,9 @@ const getTableList = (params: any) => {
   newParams.CreatedAt && (newParams.startTime = newParams.CreatedAt[0]);
   newParams.CreatedAt && (newParams.endTime = newParams.CreatedAt[1]);
   delete newParams.CreatedAt;
+
   newParams.RefreshCount = 3;
-  newParams.BlogType = "Other";
+  newParams.BlogType = "TuiJian";
   newParams.RerdisCacheMinute = 10;
   return getCsdnblogsList(newParams);
 };

@@ -100,7 +100,7 @@ export namespace User {
   export interface BaseBlogModel {
     Id: string;
     Title: string;
-
+    title: string;
     IsDel: boolean;
     CreateTime: string;
   }

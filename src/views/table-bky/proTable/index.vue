@@ -10,9 +10,9 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
-        <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
+        <!-- <el-button type="danger" :icon="Delete" plain :disabled="!scope.isSelected" @click="batchDelete(scope.selectedListIds)">
           批量删除用户(博客文章)
-        </el-button>
+        </el-button> -->
       </template>
       <!-- Expand -->
       <template #expand="scope">
@@ -32,9 +32,9 @@
       </template>
       <!-- 表格操作 -->
       <template #operation="scope">
-        <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)">查看</el-button>
-        <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
-        <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
+        <!-- <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)">查看</el-button> -->
+        <!-- <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button> -->
+        <!-- <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button> -->
       </template>
     </ProTable>
     <ImportExcel ref="dialogRef" />
@@ -252,62 +252,62 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
   ElMessage.success("修改列表排序成功");
 };
 
-// 删除用户信息
-const deleteAccount = async (params: User.Cnblogs) => {
-  await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`);
-  proTable.value?.getTableList();
-};
+// // 删除用户信息
+// const deleteAccount = async (params: User.Cnblogs) => {
+//   await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`);
+//   proTable.value?.getTableList();
+// };
 
-// 批量删除用户信息
-const batchDelete = async (id: string[]) => {
-  await useHandleData(deleteUser, { id }, "删除所选用户信息");
-  proTable.value?.clearSelection();
-  proTable.value?.getTableList();
-};
+// // 批量删除用户信息
+// const batchDelete = async (id: string[]) => {
+//   await useHandleData(deleteUser, { id }, "删除所选用户信息");
+//   proTable.value?.clearSelection();
+//   proTable.value?.getTableList();
+// };
 
-// 重置用户密码
-const resetPass = async (params: User.Cnblogs) => {
-  await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
-  proTable.value?.getTableList();
-};
+// // 重置用户密码
+// const resetPass = async (params: User.Cnblogs) => {
+//   await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
+//   proTable.value?.getTableList();
+// };
 
-// 切换用户状态
-const changeStatus = async (row: User.Cnblogs) => {
-  await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
-  proTable.value?.getTableList();
-};
+// // 切换用户状态
+// const changeStatus = async (row: User.Cnblogs) => {
+//   await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
+//   proTable.value?.getTableList();
+// };
 
-// 导出用户列表
-const downloadFile = async () => {
-  ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
-    useDownload(exportUserInfo, "用户列表", proTable.value?.searchParam)
-  );
-};
+// // 导出用户列表
+// const downloadFile = async () => {
+//   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
+//     useDownload(exportUserInfo, "用户列表", proTable.value?.searchParam)
+//   );
+// };
 
-// 批量添加用户
-const dialogRef = ref<InstanceType<typeof ImportExcel> | null>(null);
-const batchAdd = () => {
-  const params = {
-    title: "用户",
-    tempApi: exportUserInfo,
-    importApi: BatchAddUser,
-    getTableList: proTable.value?.getTableList
-  };
-  dialogRef.value?.acceptParams(params);
-};
+// // 批量添加用户
+// const dialogRef = ref<InstanceType<typeof ImportExcel> | null>(null);
+// const batchAdd = () => {
+//   const params = {
+//     title: "用户",
+//     tempApi: exportUserInfo,
+//     importApi: BatchAddUser,
+//     getTableList: proTable.value?.getTableList
+//   };
+//   dialogRef.value?.acceptParams(params);
+// };
 
-// 打开 drawer(新增、查看、编辑)
-const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
-const openDrawer = (title: string, row: Partial<User.Cnblogs> = {}) => {
-  const params = {
-    title,
-    isView: title === "查看",
-    row: { ...row },
-    api: title === "新增" ? addUser : title === "编辑" ? editUser : undefined,
-    getTableList: proTable.value?.getTableList
-  };
-  drawerRef.value?.acceptParams(params);
-};
+// // 打开 drawer(新增、查看、编辑)
+// const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
+// const openDrawer = (title: string, row: Partial<User.Cnblogs> = {}) => {
+//   const params = {
+//     title,
+//     isView: title === "查看",
+//     row: { ...row },
+//     api: title === "新增" ? addUser : title === "编辑" ? editUser : undefined,
+//     getTableList: proTable.value?.getTableList
+//   };
+//   drawerRef.value?.acceptParams(params);
+// };
 
 const downImageUrl = async url => {
   // 创建 <a> 元素
